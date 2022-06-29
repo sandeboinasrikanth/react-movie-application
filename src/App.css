@@ -1,6 +1,7 @@
 .App {
-  text-align: center;
+  text-align: left;
   /* display: flex; */
+  /* flex-wrap: wrap; */
 }
 
 .profile-pic{
@@ -26,9 +27,6 @@
 .like-button .dislike-button{
   font-size: 10px;
 }
-
-
-
 .movie-container{
     width: 340px;
     object-fit: cover;
@@ -65,3 +63,17 @@
   gap: 25px;
 
 }
+
+.add-movie-form{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 24px;
+  text-align: left;
+}
+.not-found{
+  width: 100%;
+  max-height: 700px;
+  object-fit: contain;
+}
+

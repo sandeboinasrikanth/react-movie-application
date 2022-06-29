@@ -1,13 +1,47 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
-import {Welcome, double} from './Welcome' //named imports
+import {Welcome, double} from './Welcome'; //named imports
 // import {Welcome} from './Welcome'  //default imports
 // console.log(double(20));
+import { AddColor } from './AddColor';
+import { Counter }  from './Counter';
+import { ColorBox} from './ColorBox';
+import {Message} from './Message';
+import { Movie } from './Movie';
+import { useState } from 'react';
+import { Routes, Route, Link, Navigate} from "react-router-dom";
+
+
+
+
 
 function App() {
   
-  const movieList =[
+  const students =[
+    {
+      name: "Mayuri" ,
+      pic: 'https://2.bp.blogspot.com/-PFvDOnT0qE8/UhM_tKDGzFI/AAAAAAAAEXo/KJE_-RYhJuk/s1600/6.jpg'
+    },
+    {
+      name: "Abhay" ,
+      pic: 'https://www.attitudestatus.org/wp-content/uploads/2021/05/Attitude-girl-with-Sun-glasses-dp.jpg'
+      
+    },
+    
+    {
+      name: "Netravathi" ,
+      pic: 'https://dp.profilepics.in/profile_pictures/dashing_boys/dashing_boys_profile_pictures_dashing_dps_333.jpg'
+    },
+
+    {
+      name: "Kavya" ,
+      pic: 'https://i.pinimg.com/originals/fa/94/18/fa94180586f12b800bee88f5fad29cf7.jpg'
+    }
+  ]
+
+  const names = ["Mayuri","Abhay","Netravathi","Kavya"]
+  
+  const INITIAL_MOVIE_LIST =[
     {
     name: "RRR",
     poster:
@@ -79,33 +113,10 @@ function App() {
     
     }
     ];
+  
+  const [movieList, setMovieList]= useState(INITIAL_MOVIE_LIST)
 
-  const names = ["Mayuri","Abhay","Netravathi","Kavya"]
-
-  const students =[
-    {
-      name: "Mayuri" ,
-      pic: 'https://2.bp.blogspot.com/-PFvDOnT0qE8/UhM_tKDGzFI/AAAAAAAAEXo/KJE_-RYhJuk/s1600/6.jpg'
-    },
-    {
-      name: "Abhay" ,
-      pic: 'https://www.attitudestatus.org/wp-content/uploads/2021/05/Attitude-girl-with-Sun-glasses-dp.jpg'
-      
-    },
-    
-    {
-      name: "Netravathi" ,
-      pic: 'https://dp.profilepics.in/profile_pictures/dashing_boys/dashing_boys_profile_pictures_dashing_dps_333.jpg'
-    },
-
-    {
-      name: "Kavya" ,
-      pic: 'https://i.pinimg.com/originals/fa/94/18/fa94180586f12b800bee88f5fad29cf7.jpg'
-    }
-     
-
-  ]
-
+  
   return (
     <div className="App">
     {/* components + Loop */}
@@ -119,12 +130,39 @@ function App() {
     ))} */}
     {/* <Movie/> */}
 
-    {/* <div className='movie-list'>
-    {movieList.map((mv, index)=> (
-      <Movie key={index} movie={mv} />
-      ))}
-    </div> */}
-    <AddColor/>
+    <nav >
+      <ul>
+        <li>
+          <Link to ='/' >Home</Link >
+        </li>
+        <li>
+          <Link to ='/color-game' >Color Game</Link >
+        </li>
+        <li>
+          <Link to ='/movies' >Movies</Link >
+        </li>
+      </ul>
+    </nav>
+
+    <Routes >
+        <Route path="/" element={<Home />} />
+        <Route path="color-game" element={<AddColor />} />
+        <Route path="movies" element={<MovieList movieList={movieList} setMovieList={setMovieList} />} />
+
+        <Route path="/movies/:id" element={<MovieDetails/>} />
+
+        <Route path="/films" element={<Navigate replace to ="/movies"/>} />
+
+        <Route path="/404" element={<NotFound />} />
+        {/* 404  */}
+        <Route path="*" element={<Navigate replace to ="/404"/>} />
+
+    </Routes>
+    
+
+    {/* <MovieList movieList={movieList} setMovieList={setMovieList} /> */}
+    {/* <Welcome name={vishal}/> */}
+    {/* <AddColor/> */}
     
 
     </div>
@@ -133,149 +171,66 @@ function App() {
   // jsx ends
 }
 
+function MovieDetails(){
+  return <p>Movie details page</p>
+}
+
+function NotFound(){
+  return <div>
+    <img src='https://cdn.dribbble.com/users/1175431/screenshots/6188233/404-error-dribbble-800x600.gif'
+     alt='404 not found'  className='not-found'  />
+  </div>
+}
+
+function Home(){
+  return <h1>Welcome to the Movie App 👍❤️</h1>;
+}
+
 export default App;
 
+function MovieList({movieList, setMovieList}){
+  const [name, setName] = useState("");
+  const [poster, setPoster] = useState("");
+  const [rating, setRating]= useState("");
+  const [summary, setSummary]= useState("");
 
-function AddColor(){
-  const [color, setColor]= useState("deepskyblue")
-  const styles = {
-    backgroundColor: color,
-  };
-  const INITIAL_COLOR_LIST =["deepskyblue", "crimson" ,"violet", "purple"]
-  const [colorList, setcolorList]= useState(INITIAL_COLOR_LIST);
-  return (
-      
+  const addMovie=()=> {
+    const newMovie={
+      name: name,
+      poster:poster,
+      rating:rating,
+      summary:summary,
+    } 
+    // console.log(newMovie)
+    // copy the MovieList & add the newMovie 
+    setMovieList([...movieList, newMovie])
+    }
+
+
+  return(
     <div>
-      <input value={color} onChange={(event)=>setColor(event.target.value)} style={styles} placeholder='Enter a color'></input>
+      <div className='add-movie-form'>
+        <input placeholder='Name' onChange={(event)=>setName(event.target.value)}/>
+        <input placeholder='Poster' onChange={(event)=>setPoster(event.target.value)}/>
+        <input placeholder='Rating' onChange={(event)=>setRating(event.target.value)}/>
+        <input placeholder='Summary' onChange={(event)=>setSummary(event.target.value)}/>
 
-      <button onClick={()=> setcolorList([...colorList, color])}>AddColor</button>
-
-      {colorList.map((clr, index)=>(
-      <ColorBox key={index} color={clr}/>
-      ))}
-
-    </div>
-  )
-
-}
-
-function ColorBox({color}){
-
-  const styles ={
-    backgroundColor: color,
-    height: "25px",
-    width: "250px",
-    marginTop: "5px"
-  };
-  return <div style={styles} ></div>
-}
-
-
-function Movie ({movie}){
-  // rating > 8 => green
-  // conditional styling
-  const styles = {
-    color: movie.rating > 8 ? "green" : "red",
-  };
-
-  // conditional styling
-  const [show, setShow] = useState(true);
-  const parastyles = {
-    display: show ? "block" : "none",
-  };
- 
-    return(
-      <div className='movie-container'>
-        <img className='movie-poster' src={movie.poster} alt={movie.name} />
-        <div className='movie-spec'>
-          <h2 className='movie-name'>{movie.name}</h2>
-          <p style={styles} className='movie-rating'> ⭐{movie.rating}</p>
-        </div>
-
-      {/* update the show value to be opposite to current value */}
-          <button onClick={() => setShow(!show)}>Toggle summary</button>
-          
-          {/* conditional styling */}
-      {/* <p style={parastyles}  className='movie-summary'>{movie.summary}</p> */}
-
-      {/* conditional rendering */}
-      {show ? <p style={parastyles} className='movie-summary'>{movie.summary}</p> : null}
+        {/* <p>name: {name}</p>
+        <p>poster: {poster}</p>
+        <p>rating: {rating}</p>
+        <p>summary: {summary}</p> */}
+      
+        {/* // copy the MovieList & add the newMovie in console*/}
+        <button onClick={ addMovie}>Add Movie</button>
 
       </div>
-    )
-
-} 
-
-function Counter(){
-  // let like= 10;
-  const [like, setLike] =useState(0);
-  const [dislike, setDislike] =useState(0);
-
-  // onClick => all event listeners - CamelCase
-  return(
-    <div className='counter-cantainer'>
-      <button className='like-button' onClick={() => setLike(like+1)}>👍{like}</button>
-      <button  className='dislike-button' onClick={() => setDislike(dislike+1)}>👎{dislike}</button>
+      <div className='movie-list'>
+        {movieList.map((mv, index)=> (
+        <Movie key={index} movie={mv} />
+      ))}
+      </div>
     </div>
   )
+
 }
 
-
-// defined the component- logic+view 
-
-function Message(props){
-  // const name = props.name
-  // const name ="divyashree ";
-  return (
-  <div>
-    <img className='profile-pic' src={props.pic} alt={props.name} ></img>
-    <h1>Hello, {props.name} 👍 😎 ❤️</h1>
-    <Counter/>
-  </div>
-  
-  )
-}
-
-
-
-
-
-
-
-
-
-
-
-// js starts
-  // const name = "Divyashree ";
-  // const time =30;
-  // js ends
-  // jsx starts
-  // DRY -Don't Repeat Yourself
-
-
-// create component
-// function => component
-// 1)first letter capital
-// 2)it should one only jsx element
-// props => properties - pass aruguments to components
-
-
-
-// hook - make react listen change
-// hook - function -"use" - useState
-// const [State, setState ] = useState(IntialValue);
-// state - currentValue
-// setState - function - Update State - informing that the react is changed
-
-
-// <> </>  => react fragment - helps in styling & performance
-// {} =>template syntax
-// jsx =>javascript XML 
-// className 
-
-// webpack + babel
-
-// jsx => js
-// className
-// class - keyword */}

@@ -3,7 +3,8 @@
 
 // object destructuring
 // named export
-function Welcome(props){  
+export function Welcome(props){  
+  
     return (
     <div>
       <img className='profile-pic' src={props.pic} alt={props.name} ></img>
@@ -13,10 +14,10 @@ function Welcome(props){
     )
   }
   
-const double =(n)=>  n*2;
+export const double =(n)=>  n*2;
 
 // End of the file
-export{Welcome, double}
+// export{Welcome, double}
 
 // default export
 // export default Welcome;
