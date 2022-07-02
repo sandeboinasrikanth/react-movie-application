@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-export function Movie({ movie, id}) {
+export function Movie({ movie, id }) {
   // rating > 8 => green
   // conditional styling
   const styles = {
